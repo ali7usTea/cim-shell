@@ -1,4 +1,5 @@
 @import "tailwindcss";
+@import "cim-ui-components/cim-ui-components.css";
 
 /*
  * Design tokens lifted from the Home360-in-Shell reference screenshot.
