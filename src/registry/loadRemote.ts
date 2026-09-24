@@ -25,7 +25,10 @@ export type LoadRemoteResult =
  *
  *   Only if all three pass do we return `{ status: "ready", module }`.
  */
-export async function loadRemoteModule(entry: MfeRegistryEntry): Promise<LoadRemoteResult> {
+
+export async function loadRemoteModule(
+  entry: MfeRegistryEntry,
+): Promise<LoadRemoteResult> {
   // Gate 1 — nothing to even attempt.
   if (!entry.remoteEntry) {
     return { status: "not_configured" };
@@ -42,6 +45,7 @@ export async function loadRemoteModule(entry: MfeRegistryEntry): Promise<LoadRem
     return { status: "unreachable", error: availability.error };
   }
 
+  /* remove this block as old version working of moduel federation.
   // Gate 3 — attempt the real dynamic-remote load.
   try {
     // @ts-expect-error -- virtual module injected by @originjs/vite-plugin-federation at build time
@@ -71,10 +75,14 @@ export async function loadRemoteModule(entry: MfeRegistryEntry): Promise<LoadRem
 
     return { status: "ready", module: container as FederatedMfeModule };
   } catch (err) {
-    console.error(`[mfe-registry] failed to load remote "${entry.remoteName}"`, err);
+    console.error(
+      `[mfe-registry] failed to load remote "${entry.remoteName}"`,
+      err,
+    );
     return {
       status: "load_error",
       error: err instanceof Error ? err.message : "unknown federation error",
     };
   }
+  */
 }

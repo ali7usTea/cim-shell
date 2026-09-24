@@ -2,19 +2,145 @@
   "$comment": "Runtime remote registry per proposal §5.2 — 'Maintain a remote registry/configuration rather than hard coding every remote URL throughout application code.' The Shell fetches this at startup instead of importing remote URLs in source. Point remoteEntry at each MFE's built remoteEntry.js once deployed. The `status` field here is just a seed value — the Shell re-verifies real reachability itself at runtime (src/registry/useMfeRegistry.ts) and overwrites this on load, so you never need to hand-flip it to 'deployed'.",
   "version": 1,
   "mfes": [
-    { "id": "customer",  "name": "Customer",  "remoteName": "customerMfe",  "remoteEntry": "", "exposedModule": "./App", "route": "/customer",  "icon": "user",        "status": "not_configured" },
-    { "id": "home360",   "name": "Home360",   "remoteName": "home360Mfe",   "remoteEntry": "", "exposedModule": "./App", "route": "/home360",   "icon": "home",        "status": "not_configured" },
-    { "id": "billing",   "name": "Billing",   "remoteName": "billingMfe",   "remoteEntry": "", "exposedModule": "./App", "route": "/billing",   "icon": "receipt",     "status": "not_configured" },
-    { "id": "contract",  "name": "Contract",  "remoteName": "contractMfe",  "remoteEntry": "", "exposedModule": "./App", "route": "/contract",  "icon": "file-text",   "status": "not_configured" },
-    { "id": "account",   "name": "Account",   "remoteName": "accountMfe",   "remoteEntry": "", "exposedModule": "./App", "route": "/account",   "icon": "wallet",      "status": "not_configured" },
-    { "id": "orders",    "name": "Orders",    "remoteName": "ordersMfe",    "remoteEntry": "", "exposedModule": "./App", "route": "/orders",    "icon": "shopping-bag","status": "not_configured" },
-    { "id": "support",   "name": "Support",   "remoteName": "supportMfe",   "remoteEntry": "", "exposedModule": "./App", "route": "/support",   "icon": "life-buoy",   "status": "not_configured" },
-    { "id": "loyalty",   "name": "Loyalty",   "remoteName": "loyaltyMfe",   "remoteEntry": "", "exposedModule": "./App", "route": "/loyalty",   "icon": "star",        "status": "not_configured" },
-    { "id": "devices",   "name": "Devices",   "remoteName": "devicesMfe",   "remoteEntry": "", "exposedModule": "./App", "route": "/devices",   "icon": "smartphone",  "status": "not_configured" },
-    { "id": "network",   "name": "Network",   "remoteName": "networkMfe",   "remoteEntry": "", "exposedModule": "./App", "route": "/network",   "icon": "signal",      "status": "not_configured" },
-    { "id": "disputes",  "name": "Disputes",  "remoteName": "disputesMfe",  "remoteEntry": "", "exposedModule": "./App", "route": "/disputes",  "icon": "shield-alert","status": "not_configured" },
-    { "id": "notes",     "name": "Notes",     "remoteName": "notesMfe",     "remoteEntry": "", "exposedModule": "./App", "route": "/notes",     "icon": "sticky-note", "status": "not_configured" },
-    { "id": "history",   "name": "History",   "remoteName": "historyMfe",   "remoteEntry": "", "exposedModule": "./App", "route": "/history",   "icon": "history",     "status": "not_configured" },
-    { "id": "campaigns", "name": "Campaigns", "remoteName": "campaignsMfe", "remoteEntry": "", "exposedModule": "./App", "route": "/campaigns", "icon": "megaphone",   "status": "not_configured" }
+    {
+      "id": "customer",
+      "name": "Customer",
+      "remoteName": "customerMfe",
+      "remoteEntry": "",
+      "exposedModule": "./App",
+      "route": "/customer",
+      "icon": "user",
+      "status": "not_configured"
+    },
+    {
+      "id": "home360",
+      "name": "Home360",
+      "remoteName": "home360Mfe",
+      "remoteEntry": "",
+      "exposedModule": "./App",
+      "route": "/home360",
+      "icon": "home",
+      "status": "not_configured"
+    },
+    {
+      "id": "billing",
+      "name": "Billing",
+      "remoteName": "billingMfe",
+      "remoteEntry": "",
+      "exposedModule": "./App",
+      "route": "/billing",
+      "icon": "receipt",
+      "status": "not_configured"
+    },
+    {
+      "id": "contract",
+      "name": "Contract",
+      "remoteName": "contractMfe",
+      "remoteEntry": "",
+      "exposedModule": "./App",
+      "route": "/contract",
+      "icon": "file-text",
+      "status": "not_configured"
+    },
+    {
+      "id": "account",
+      "name": "Account",
+      "remoteName": "accountMfe",
+      "remoteEntry": "",
+      "exposedModule": "./App",
+      "route": "/account",
+      "icon": "wallet",
+      "status": "not_configured"
+    },
+    {
+      "id": "orders",
+      "name": "Orders",
+      "remoteName": "ordersMfe",
+      "remoteEntry": "",
+      "exposedModule": "./App",
+      "route": "/orders",
+      "icon": "shopping-bag",
+      "status": "not_configured"
+    },
+    {
+      "id": "support",
+      "name": "Support",
+      "remoteName": "supportMfe",
+      "remoteEntry": "",
+      "exposedModule": "./App",
+      "route": "/support",
+      "icon": "life-buoy",
+      "status": "not_configured"
+    },
+    {
+      "id": "loyalty",
+      "name": "Loyalty",
+      "remoteName": "loyaltyMfe",
+      "remoteEntry": "",
+      "exposedModule": "./App",
+      "route": "/loyalty",
+      "icon": "star",
+      "status": "not_configured"
+    },
+    {
+      "id": "devices",
+      "name": "Devices",
+      "remoteName": "devicesMfe",
+      "remoteEntry": "",
+      "exposedModule": "./App",
+      "route": "/devices",
+      "icon": "smartphone",
+      "status": "not_configured"
+    },
+    {
+      "id": "network",
+      "name": "Network",
+      "remoteName": "networkMfe",
+      "remoteEntry": "",
+      "exposedModule": "./App",
+      "route": "/network",
+      "icon": "signal",
+      "status": "not_configured"
+    },
+    {
+      "id": "disputes",
+      "name": "Disputes",
+      "remoteName": "disputesMfe",
+      "remoteEntry": "",
+      "exposedModule": "./App",
+      "route": "/disputes",
+      "icon": "shield-alert",
+      "status": "not_configured"
+    },
+    {
+      "id": "notes",
+      "name": "Notes",
+      "remoteName": "notesMfe",
+      "remoteEntry": "",
+      "exposedModule": "./App",
+      "route": "/notes",
+      "icon": "sticky-note",
+      "status": "not_configured"
+    },
+    {
+      "id": "history",
+      "name": "History",
+      "remoteName": "historyMfe",
+      "remoteEntry": "",
+      "exposedModule": "./App",
+      "route": "/history",
+      "icon": "history",
+      "status": "not_configured"
+    },
+    {
+      "id": "campaigns",
+      "name": "Campaigns",
+      "remoteName": "campaignsMfe",
+      "remoteEntry": "",
+      "exposedModule": "./App",
+      "route": "/campaigns",
+      "icon": "megaphone",
+      "status": "not_configured"
+    }
   ]
 }

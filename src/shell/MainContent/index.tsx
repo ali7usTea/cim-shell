@@ -1,9 +1,57 @@
-import { useEffect, useRef, useState } from "react";
+import React, { Suspense, useEffect, useRef, useState } from "react";
 import { PlugZap, AlertTriangle, RotateCw } from "lucide-react";
 import { PlanCard } from "./PlanCard";
 import { MOCK_HOME360_PLANS } from "@/mock/data";
 import { loadRemoteModule, type LoadRemoteResult } from "@/registry/loadRemote";
 import type { AgentSession, MfeRegistryEntry, SearchContext } from "@/types";
+
+
+import { Component, ErrorInfo, ReactNode } from 'react';
+/* 
+ * Remote MFE adding.
+ */
+const OrderApp = React.lazy(() => import('cim_order/order'));
+const FixedApp = React.lazy(() => import('cim_fixed/fixed'));
+
+interface RemoteErrorBoundaryProps {
+  remoteName: string;
+  port: number | string;
+  sourceDir: string;
+  children: ReactNode;
+}
+interface RemoteErrorBoundaryState {
+  hasError: boolean;
+}
+class RemoteErrorBoundary extends Component<RemoteErrorBoundaryProps, RemoteErrorBoundaryState> {
+  constructor(props: RemoteErrorBoundaryProps) {
+    super(props);
+    this.state = { hasError: false };
+  }
+  static getDerivedStateFromError(): RemoteErrorBoundaryState {
+    return { hasError: true };
+  }
+  componentDidCatch(error: Error, errorInfo: ErrorInfo) {
+    // Optional: Log your module federation loading errors here
+    console.error("Federated Remote Error:", error, errorInfo);
+  }
+  render() {
+    if (this.state.hasError) {
+      const { remoteName, port, sourceDir } = this.props;
+      return (
+        <div>
+          <p style={{ color: 'crimson ' }}>
+            Couldn't load <code>{remoteName}</code>. Is it running on port{' '}
+            {port}? (<code>npm run build & npm run preview</code> in {' '}
+            <code>{sourceDir}</code>)
+          </p>
+        </div>
+      );
+    }
+    return this.props.children;
+  }
+}
+
+
 
 interface MainContentProps {
   search: SearchContext | null;
@@ -34,13 +82,24 @@ export function MainContent({ search, mfe, session }: MainContentProps) {
   const [view, setView] = useState<ViewState>({ kind: "loading" });
   const [retryToken, setRetryToken] = useState(0);
 
-  const isDemo = mfe?.id === "home360" && !mfe.remoteEntry;
+  // change-1
+  // const isDemo = mfe?.id === "home360" && !mfe.remoteEntry;
+
+  // Checks if this is using standard dynamic mounting layout or React component imports
+  const isReactFederationMfe = mfe?.id === "cim_order" || mfe?.id === "cim_fixed" || mfe?.id === "home360";
+  console.log("isReactFederationMfe: ", isReactFederationMfe);
 
   useEffect(() => {
     if (!mfe || !search) return;
 
-    if (isDemo) {
-      setView({ kind: "not_configured" }); // rendered locally below instead, not shown as an error
+    // change-1
+    // if (isDemo) {
+    //   setView({ kind: "not_configured" }); // rendered locally below instead, not shown as an error
+    //   return;
+    // }
+    // Skip native runtime mounting logic for standard React federated components
+    if (isReactFederationMfe) {
+      setView({ kind: "ready" });
       return;
     }
 
@@ -97,20 +156,66 @@ export function MainContent({ search, mfe, session }: MainContentProps) {
     );
   }
 
-  if (isDemo) {
+  // change-1
+  // if (isDemo) {
+  //   return (
+  //     <div className="flex-1 overflow-y-auto p-6">
+  //       <div className="mb-4 flex items-baseline justify-between">
+  //         <h1 className="text-base font-semibold text-slate-800">Home360</h1>
+  //         <span className="text-xs text-slate-400">
+  //           Local demo content — swap for the real Home360 remote once registered
+  //         </span>
+  //       </div>
+  //       <div className="grid grid-cols-1 gap-3 md:grid-cols-2">
+  //         {MOCK_HOME360_PLANS.map((plan) => (
+  //           <PlanCard key={plan.id} plan={plan} />
+  //         ))}
+  //       </div>
+  //     </div>
+  //   );
+  // }
+
+
+  // Handle standard React component imports seamlessly within the view layout
+  if (view.kind === "ready" && isReactFederationMfe) {
     return (
       <div className="flex-1 overflow-y-auto p-6">
-        <div className="mb-4 flex items-baseline justify-between">
-          <h1 className="text-base font-semibold text-slate-800">Home360</h1>
-          <span className="text-xs text-slate-400">
-            Local demo content — swap for the real Home360 remote once registered
-          </span>
+        <div className="mb-4">
+          <h1 className="text-base font-semibold text-slate-800">{mfe.name} Workspace</h1>
         </div>
-        <div className="grid grid-cols-1 gap-3 md:grid-cols-2">
-          {MOCK_HOME360_PLANS.map((plan) => (
-            <PlanCard key={plan.id} plan={plan} />
-          ))}
-        </div>
+
+        <Suspense fallback={<div className="text-sm text-slate-500">Loading remote component workspace...</div>}>
+          {mfe.id === "cim_order" && (
+            <RemoteErrorBoundary remoteName="Order MFE" port={3014} sourceDir="cim_order">
+              <OrderApp />
+            </RemoteErrorBoundary>
+          )}
+
+          {mfe.id === "cim_fixed" && (
+            <RemoteErrorBoundary remoteName="Fixed MFE" port={3008} sourceDir="cim_fixed">
+              <FixedApp />
+            </RemoteErrorBoundary>
+          )}
+
+          {mfe.id === "home360" && (
+            <div className="text-sm text-slate-400 p-4 border border-dashed rounded-md">
+              {/* Local Home360 placeholder panel container. */}
+              <div className="flex-1 overflow-y-auto p-6">
+                <div className="mb-4 flex items-baseline justify-between">
+                  <h1 className="text-base font-semibold text-slate-800">Home360</h1>
+                  <span className="text-xs text-slate-400">
+                    Local demo content — swap for the real Home360 remote once registered
+                  </span>
+                </div>
+                <div className="grid grid-cols-1 gap-3 md:grid-cols-2">
+                  {MOCK_HOME360_PLANS.map((plan) => (
+                    <PlanCard key={plan.id} plan={plan} />
+                  ))}
+                </div>
+              </div>
+            </div>
+          )}
+        </Suspense>
       </div>
     );
   }
@@ -168,6 +273,7 @@ export function MainContent({ search, mfe, session }: MainContentProps) {
     );
   }
 
+  // change-1
   return (
     <div className="relative flex-1 overflow-y-auto p-6">
       {view.kind === "loading" && (
@@ -179,4 +285,7 @@ export function MainContent({ search, mfe, session }: MainContentProps) {
       <div ref={mountRef} data-mfe={mfe.id} />
     </div>
   );
+
+  // Dynamic Ref Mount Fallback for native runtime micro-frontends
+  // return <div ref={mountRef} className="flex-1 overflow-y-auto" />;
 }

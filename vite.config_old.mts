@@ -1,9 +1,9 @@
 import { defineConfig, loadEnv } from "vite";
 import react from "@vitejs/plugin-react";
 import tailwindcss from "@tailwindcss/vite";
-import path from "path";
-// import federation from "@originjs/vite-plugin-federation";   // old code.
 import { federation } from "@module-federation/vite";
+import path from "path";
+// import federation from "@originjs/vite-plugin-federation"; //Haider
 // import path from "node:path";   //Haider1
 
 // RBC Shell — Module Federation HOST.
@@ -21,9 +21,7 @@ export default defineConfig(({ mode }) => {
   // Load VIT_REMOTE_* from .env.[mode] so remote URLs are never
   // hard-coded - see  src/remotes/registery.ts for how these are consumed
   // at return too.
-
-  // Load environment variables from the current directory matching the execution mode
-  const env = loadEnv(mode, process.cwd(), "");
+  const env = loadEnv(mode, process.cwd(), "VITE_");
 
   return {
     plugins: [
@@ -36,40 +34,24 @@ export default defineConfig(({ mode }) => {
           // Declaring  it here lets Vite/Rollup do type-safty dynamic `import('cim_fixed/FixedApp')` calss;
           // the *actual* runtime, still only hapends when a remote is requested at runtime, so undeployed remote does no break
           // the Shell' build or startup - it only fails when that MFE is opned,
-          // cim_fixed: `${env.VITE_REMOTE_FIXED_URL}/remoteEntry.js`,
-          // cim_order: `${env.VITE_REMOTE_ORDER_URL}/remoteEntry.js`,
-
-          // Dynamically read paths from your .env keys
-          cim_order: `cim_order@${env.VITE_REMOTE_ORDER_URL}/remoteEntry.js`,
-          cim_fixed: `cim_fixed@${env.VITE_REMOTE_FIXED_URL}/remoteEntry.js`,
-
-          // Pointing to /order/remoteEntry.js because of the remote's base path
-          // cim_order: "cim_order@http://localhost:3014/order/remoteEntry.js",
-          // Do the same for fixed depending on its base configuration
-          // cim_fixed: "cim_fixed@http://localhost:3008/fixed/remoteEntry.js",
+          cim_fixed: `${env.VITE_REMOTE_FIXED_URL}/remoteEntry.js`,
+          cim_order: `${env.VITE_REMOTE_ORDER_URL}/remoteEntry.js`,
         },
         shared: {
-          react: { requiredVersion: "19.1.0" },
-          "react-dom": { requiredVersion: "19.1.0" },
-          "react-router-dom": { requiredVersion: "^7.5.3" },
+          react: { singleton: true, requiredVersion: "19.1.0" },
+          "react-dom": { singleton: true, requiredVersion: "19.1.0" },
+          "react-router-dom": { singleton: true, requiredVersion: "^7.5.3" },
         },
       }),
     ],
     build: {
       target: "esnext",
-      minify: false,
-      // cssCodeSplit: false,
-      // modulePreload: false,
+      outDir: "dist",
+      modulePreload: false,
+      cssCodeSplit: false,
     },
     server: {
       port: 3000,
-      strictPort: true,
-      cors: true,
-    },
-    preview: {
-      port: 3000,
-      strictPort: true,
-      cors: true,
     },
     resolve: {
       alias: {
@@ -80,9 +62,9 @@ export default defineConfig(({ mode }) => {
     optimizeDeps: {
       exclude: [
         "@tailwindcss/oxide",
-        "@tailwindcss/oxide-win32-x64-msvc",
-        "@module-federation/runtime",
-        "@module-federation/enhanced",
+        "@tailwindcss/oxide-win32-x64-msvc", // Add the specific Windows binary from your error log
+        "virtual:__federation__",
+        "__federation__",
       ],
     },
   };

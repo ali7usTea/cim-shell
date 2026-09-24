@@ -11,6 +11,7 @@ import { SlideMenu } from "@/shell/SlideMenu";
 import { FloatingNotification, type IncomingInteraction } from "@/shell/FloatingNotification";
 import { MOCK_INITIAL_SEARCHES, MOCK_SESSION } from "@/mock/data";
 
+
 function Workspace() {
   const { entries: mfes } = useMfeRegistry();
   const { searches, activeSearch, selectSearch, setActiveMfe, openSearch } = useSearchContexts();
