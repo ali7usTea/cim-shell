@@ -40,7 +40,11 @@ export interface SearchContext {
 
 export const MAX_CONCURRENT_SEARCHES = 10;
 
-export type MfeLoadStatus = "not_configured" | "checking" | "deployed" | "unreachable";
+export type MfeLoadStatus =
+  | "not_configured"
+  | "checking"
+  | "deployed"
+  | "unreachable";
 
 /**
  * One entry in the runtime remote registry (public/mfe-registry.json).
@@ -56,7 +60,9 @@ export interface MfeRegistryEntry {
   remoteEntry: string; // built remoteEntry.js URL — populated by platform/ops config, never hardcoded in source
   exposedModule: string;
   route: string;
+  port: string;
   icon: string;
+  sourceDir: string;
   status: MfeLoadStatus;
   /** epoch ms of the last availability check, if any has run yet */
   lastCheckedAt?: number;

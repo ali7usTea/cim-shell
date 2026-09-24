@@ -31,7 +31,9 @@ export function useMfeRegistry(pollMs: number = DEFAULT_POLL_MS) {
       .filter((entry) => Boolean(entry.remoteEntry))
       .forEach((entry) => {
         setEntries((prev) =>
-          prev.map((e) => (e.id === entry.id ? { ...e, status: "checking" } : e)),
+          prev.map((e) =>
+            e.id === entry.id ? { ...e, status: "checking" } : e,
+          ),
         );
 
         checkRemoteAvailability(entry.remoteEntry).then((result) => {
@@ -60,6 +62,8 @@ export function useMfeRegistry(pollMs: number = DEFAULT_POLL_MS) {
         return res.json() as Promise<MfeRegistryFile>;
       })
       .then((file) => {
+        console.log(file);
+        console.log(file.mfes);
         if (cancelled) return;
         const seeded: MfeRegistryEntry[] = file.mfes.map((m) => ({
           ...m,
@@ -69,7 +73,10 @@ export function useMfeRegistry(pollMs: number = DEFAULT_POLL_MS) {
         checkAll(seeded);
       })
       .catch((err) => {
-        if (!cancelled) setError(err instanceof Error ? err.message : "unknown registry error");
+        if (!cancelled)
+          setError(
+            err instanceof Error ? err.message : "unknown registry error",
+          );
       })
       .finally(() => {
         if (!cancelled) setLoading(false);

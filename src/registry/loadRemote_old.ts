@@ -25,6 +25,7 @@ export type LoadRemoteResult =
  *
  *   Only if all three pass do we return `{ status: "ready", module }`.
  */
+
 export async function loadRemoteModule(
   entry: MfeRegistryEntry,
 ): Promise<LoadRemoteResult> {
@@ -44,7 +45,7 @@ export async function loadRemoteModule(
     return { status: "unreachable", error: availability.error };
   }
 
-  /*
+  /* remove this block as old version working of moduel federation.
   // Gate 3 — attempt the real dynamic-remote load.
   try {
     // @ts-expect-error -- virtual module injected by @originjs/vite-plugin-federation at build time
