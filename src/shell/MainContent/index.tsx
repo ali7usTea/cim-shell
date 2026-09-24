@@ -86,8 +86,8 @@ export function MainContent({ search, mfe, session }: MainContentProps) {
   // const isDemo = mfe?.id === "home360" && !mfe.remoteEntry;
 
   // Checks if this is using standard dynamic mounting layout or React component imports
-  const isReactFederationMfe = mfe?.id === "cim_order" || mfe?.id === "cim_fixed" || mfe?.id === "home360";
-  console.log("isReactFederationMfe: ", isReactFederationMfe);
+  const isReactFederationMfe = mfe?.id === "cim_order" || mfe?.id === "cim_fixed" || mfe?.id === "cim_home360";
+  console.log("isReactFederationMfe: ", isReactFederationMfe, " mfe: ", mfe);
 
   useEffect(() => {
     if (!mfe || !search) return;
@@ -178,26 +178,27 @@ export function MainContent({ search, mfe, session }: MainContentProps) {
 
   // Handle standard React component imports seamlessly within the view layout
   if (view.kind === "ready" && isReactFederationMfe) {
+    console.log("mfe: ", mfe)
     return (
       <div className="flex-1 overflow-y-auto p-6">
         <div className="mb-4">
-          <h1 className="text-base font-semibold text-slate-800">{mfe.name} Workspace</h1>
+          <h1 className="text-base font-semibold text-slate-800">{mfe.name}</h1>
         </div>
 
         <Suspense fallback={<div className="text-sm text-slate-500">Loading remote component workspace...</div>}>
           {mfe.id === "cim_order" && (
-            <RemoteErrorBoundary remoteName="Order MFE" port={3014} sourceDir="cim_order">
+            <RemoteErrorBoundary remoteName={mfe.name} port={mfe.port} sourceDir={mfe.exposedModule}>
               <OrderApp />
             </RemoteErrorBoundary>
           )}
 
           {mfe.id === "cim_fixed" && (
-            <RemoteErrorBoundary remoteName="Fixed MFE" port={3008} sourceDir="cim_fixed">
+            <RemoteErrorBoundary remoteName={mfe.name} port={mfe.port} sourceDir={mfe.exposedModule}>
               <FixedApp />
             </RemoteErrorBoundary>
           )}
 
-          {mfe.id === "home360" && (
+          {mfe.id === "cim_home360" && (
             <div className="text-sm text-slate-400 p-4 border border-dashed rounded-md">
               {/* Local Home360 placeholder panel container. */}
               <div className="flex-1 overflow-y-auto p-6">

@@ -1,5 +1,6 @@
 import type { FederatedMfeModule, MfeRegistryEntry } from "@/types";
 import { checkRemoteAvailability } from "./checkRemoteAvailability";
+import { init, loadRemote } from "@module-federation/enhanced/runtime";
 
 /**
  * Every possible outcome of trying to load one MFE, named explicitly so
@@ -42,6 +43,37 @@ export async function loadRemoteModule(
   const availability = await checkRemoteAvailability(entry.remoteEntry);
   if (!availability.available) {
     return { status: "unreachable", error: availability.error };
+  }
+
+  const registeredRemotes = new Set();
+
+  try {
+    // 2. Safely introduce the newly discovered live remote asset to the runtime scope
+    if (!registeredRemotes.has(entry.id)) {
+      init({
+        name: "Shell",
+        remotes: [
+          {
+            name: entry.id,
+            entry: entry.remoteEntry,
+          },
+        ],
+      });
+      registeredRemotes.add(entry.id);
+    }
+
+    // 3. Complete a verification load of the entry sequence to affirm zero runtime code faults
+    // By pointing to the container name block, we inspect container initialization integrity
+    await loadRemote(entry.id);
+
+    const module = await loadRemoteModule(entry.name, entry.sourceDir);
+    return { status: "ready", module: module };
+  } catch (err: any) {
+    console.error(`Federation mounting failure on ${entry.id}:`, err);
+    return {
+      status: "load_error",
+      error: err?.message || "Federation module execution failed",
+    };
   }
 
   /*

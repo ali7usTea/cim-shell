@@ -21,6 +21,7 @@ function Workspace() {
   const [slidePanel, setSlidePanel] = useState<null | "call" | "assist" | "notes" | "settings">(null);
   const [incoming, setIncoming] = useState<IncomingInteraction | null>(null);
 
+
   // Demo only: simulate a new Genesys interaction arriving a few seconds in,
   // so the Floating Interaction Notification has something to show without
   // a live Genesys connection.
