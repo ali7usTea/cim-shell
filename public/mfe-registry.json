@@ -3,6 +3,26 @@
   "version": 1,
   "mfes": [
     {
+      "id": "cim_webbased",
+      "name": "Webbased",
+      "remoteEntry": "http://localhost:3006/webbased/remoteEntry.js",
+      "route": "/webbased",
+      "port": 3006,
+      "sourceDir": "cim_webbased",
+      "icon": "smartphone",
+      "status": "not_configured"
+    },
+    {
+      "id": "cim_usage",
+      "name": "Usage",
+      "remoteEntry": "http://localhost:3007/usage/remoteEntry.js",
+      "route": "/usage",
+      "port": 3007,
+      "sourceDir": "cim_usage",
+      "icon": "history",
+      "status": "not_configured"
+    },
+    {
       "id": "cim_fixed",
       "name": "Fixed",
       "remoteEntry": "http://localhost:3008/fixed/remoteEntry.js",
@@ -13,6 +33,56 @@
       "status": "not_configured"
     },
     {
+      "id": "cim_online",
+      "name": "Online Management",
+      "remoteEntry": "http://localhost:3009/online/remoteEntry.js",
+      "route": "/online",
+      "port": 3009,
+      "sourceDir": "cim_online",
+      "icon": "life-buoy",
+      "status": "not_configured"
+    },
+    {
+      "id": "cim_billing",
+      "name": "Billing Management",
+      "remoteEntry": "http://localhost:3010/billing/remoteEntry.js",
+      "route": "/billing",
+      "port": 3010,
+      "sourceDir": "cim_billing",
+      "icon": "receipt",
+      "status": "not_configured"
+    },
+    {
+      "id": "cim_profile",
+      "name": "Profile Management",
+      "remoteEntry": "http://localhost:3011/profile/remoteEntry.js",
+      "route": "/profile",
+      "port": 3011,
+      "sourceDir": "cim_profile",
+      "icon": "user",
+      "status": "not_configured"
+    },
+    {
+      "id": "cim_mobile",
+      "name": "Mobile Management",
+      "remoteEntry": "http://localhost:3012/mobile/remoteEntry.js",
+      "route": "/mobile",
+      "port": 3012,
+      "sourceDir": "cim_mobile",
+      "icon": "signal",
+      "status": "not_configured"
+    },
+    {
+      "id": "cim_interaction",
+      "name": "Interaction Management",
+      "remoteEntry": "http://localhost:3013/interaction/remoteEntry.js",
+      "route": "/interaction",
+      "port": 3013,
+      "sourceDir": "cim_interaction",
+      "icon": "wallet",
+      "status": "not_configured"
+    },
+    {
       "id": "cim_order",
       "name": "Order Management",
       "remoteEntry": "http://localhost:3014/order/remoteEntry.js",
@@ -20,6 +90,56 @@
       "port": 3014,
       "sourceDir": "cim_order",
       "icon": "shopping-bag",
+      "status": "not_configured"
+    },
+    {
+      "id": "cim_generic",
+      "name": "Generic",
+      "remoteEntry": "http://localhost:3015/generic/remoteEntry.js",
+      "route": "/generic",
+      "port": 3015,
+      "sourceDir": "cim_generic",
+      "icon": "star",
+      "status": "not_configured"
+    },
+    {
+      "id": "cim_home360",
+      "name": "Mome360 Management",
+      "remoteEntry": "http://localhost:3016/home360/remoteEntry.js",
+      "route": "/home360",
+      "port": 3016,
+      "sourceDir": "cim_home360",
+      "icon": "home",
+      "status": "not_configured"
+    },
+    {
+      "id": "cim_quickorder",
+      "name": "Quickorder",
+      "remoteEntry": "http://localhost:3017/quickorder/remoteEntry.js",
+      "route": "/quickorder",
+      "port": 3017,
+      "sourceDir": "cim_quickorder",
+      "icon": "megaphone",
+      "status": "not_configured"
+    },
+    {
+      "id": "cim_sidePanel",
+      "name": "SidePanel",
+      "remoteEntry": "http://localhost:3018/sidePanel/remoteEntry.js",
+      "route": "/sidePanel",
+      "port": 3018,
+      "sourceDir": "cim_sidePanel",
+      "icon": "file-text",
+      "status": "not_configured"
+    },
+    {
+      "id": "cim_complaints",
+      "name": "Complaints",
+      "remoteEntry": "http://localhost:3019/complaints/remoteEntry.js",
+      "route": "/complaints",
+      "port": 3019,
+      "sourceDir": "cim_complaints",
+      "icon": "shield-alert",
       "status": "not_configured"
     }
   ]
